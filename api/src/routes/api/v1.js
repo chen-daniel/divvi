@@ -23,6 +23,26 @@ router
   .post(v1Controller.groups.createGroup)
   .delete(v1Controller.groups.deleteGroup);
 
+// needs to find out how to do entire update, get by group id kinda mess things up
+router
+  .route('/receipts')
+  .post(v1Controller.receipts.createReceipt)
+  .delete(v1Controller.receipts.deleteReceipt)
+  .put(v1Controller.receipts.personPay) 
+
+router
+  .route('/requests')
+  .post(v1Controller.requests.createRequest)
+
+router
+  .route('/requests/:requestId')
+  .get(v1Controller.requests.getRequest)
+  .delete(v1Controller.requests.removeRequest)
+  
+router
+  .route('/receipts/:groupsId')
+  .get(v1Controller.groups.getGroup)
+
 router
   .route('/userGroups')
   .get(v1Controller.userToGroups.getUserGroup)
