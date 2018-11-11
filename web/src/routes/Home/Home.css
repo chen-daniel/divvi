@@ -6,7 +6,8 @@
 }
 
 .home-page {
-  max-width: 50%;
+  min-width: 40vw;
+  max-width: 100%;
   padding: 2.5em 3em 0.5em 3em;
 }
 
@@ -15,4 +16,8 @@
   text-transform: none;
   color: black;
   letter-spacing: 0.075em;
+}
+
+.create-group {
+  cursor: pointer;
 }

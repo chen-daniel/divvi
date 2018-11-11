@@ -1,15 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import cookie from 'react-cookies';
-
-import api from '../../api';
-
-import $ from 'jquery';
+import DelayLink from '../DelayLink/DelayLink.component'
 
 /**
  * Wraps the React Router Link component and creates a delay after the link is clicked.
  */
-class DelayLinkList extends React.Component {
+class Tile extends React.Component {
   static defaultProps = {
     delay: 0,
     onDelayStart: () => {},
@@ -21,6 +17,7 @@ class DelayLinkList extends React.Component {
   constructor(props) {
     super(props);
     this.timeout = null;
+    this.q
   }
 
   componentWillUnmount() {
@@ -35,29 +32,19 @@ class DelayLinkList extends React.Component {
    * @param {Event} e
    */
   handleClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
     const { replace, to, delay, onDelayStart, onDelayEnd } = this.props;
     const { history, route } = this.context.router;
     const currLocation = route.location.pathname;
 
-    if (currLocation === to && currLocation !== '/projects') {
+    if (currLocation === to) {
       return;
     }
-    if (currLocation.includes('/projects') && to.includes('/projects')) {
-      history.replace(to);
-      return;
-    }
+
     onDelayStart(e, to);
-    if (this.props.class === 'logout') {
-      api.default.execAuth(
-        'DELETE',
-        `http://localhost:3001/api/v1/sessions`,
-      );
-      cookie.remove('token');
-      cookie.remove('accountId');
-      window.location.href = '/';
+    if (e.defaultPrevented) {
+      return;
     }
+    e.preventDefault();
 
     this.timeout = setTimeout(() => {
       if (replace) {
@@ -77,11 +64,11 @@ class DelayLinkList extends React.Component {
     delete props.to;
 
     return (
-      <li className={props.class} onClick={this.handleClick}>
-        {props.children}
+      <li className={props.class}>
+      <Link></Link>
       </li>
-    );
+    )
   }
 }
 
-export default DelayLinkList;
+export default Tile;

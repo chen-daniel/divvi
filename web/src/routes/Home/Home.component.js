@@ -1,6 +1,8 @@
 import React from 'react';
 import cookie from 'react-cookies';
 
+import DelayLinkList from '../../common-components/DelayLink/DelayLinkList.component';
+
 import $ from 'jquery';
 
 import './Home.css';
@@ -16,7 +18,9 @@ class Home extends React.Component {
   componentDidMount() {
     api.default.execAuth(
       'GET',
-      `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}/groups`,
+      `http://localhost:3001/api/v1/accounts/${cookie.load(
+        'accountId'
+      )}/groups`,
       null,
       (response) => {
         this.setState(response);
@@ -34,13 +38,35 @@ class Home extends React.Component {
     }, 50);
   }
 
+  generateGroupsList() {
+    const groupsList = [];
+    for (let i = 0; i < this.state.length; i++) {
+      let link = `/groups/${this.state[i].id}`;
+      groupsList.push(
+        <DelayLinkList
+          class="group"
+          to={link}
+          delay={375}
+          onDelayStart={this._delayStart}
+        >
+          <p>this.state[i].name</p>
+        </DelayLinkList>
+      );
+    }
+    return groupsList;
+  }
+
+  createGroupForm(e) {
+    e.preventDefault();
+    
+  }
+  
+
   render() {
     return (
       <section className="home-page" id="main">
-        <header>
-          
-        </header>
-        <p>{JSON.stringify(this.state)}</p>
+        <div className="create-group" onClick={this.createGroupModal}>+ Create new group</div>
+        <ul>{this.generateGroupsList()}</ul>
       </section>
     );
   }
