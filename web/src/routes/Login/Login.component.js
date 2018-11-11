@@ -9,6 +9,8 @@ import _ from 'lodash';
 
 import './Login.css';
 
+const api = require('../../api');
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -41,32 +43,21 @@ class Login extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const data = _.pick(this.state, ['username', 'password']);
-    $.ajax({
-      type: 'POST',
-      beforeSend: function(request) {
-        request.setRequestHeader('Access-Control-Allow-Origin', '*');
-        request.setRequestHeader(
-          'Access-Control-Allow-Methods',
-          'GET, POST, PATCH, PUT, DELETE, OPTIONS'
-        );
-        request.setRequestHeader(
-          'Access-Control-Allow-Headers',
-          'Origin, Content-Type, X-Auth-Token'
-        );
-      },
-      url: 'http://localhost:3001/api/v1/sessions',
-      data: 'json=' + escape(JSON.stringify(data)),
-      success: (response) => {
+    api.default.exec(
+      'POST',
+      'http://localhost:3001/api/v1/sessions',
+      'json=' + escape(JSON.stringify(data)),
+      (response) => {
         cookie.save('token', response.token);
         cookie.save('accountId', response.accountId);
 
         window.location.href = '/#/home';
         window.location.reload(false);
       },
-      error: (err) => {
+      (err) => {
         alert('Failed to login with provided credentials', err);
       }
-    });
+    );
   };
 
   render() {

@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import cookie from 'react-cookies';
 
-import api from '../../api';
-
 import $ from 'jquery';
+
+const api = require('../../api');
 
 /**
  * Wraps the React Router Link component and creates a delay after the link is clicked.
@@ -50,10 +50,7 @@ class DelayLinkList extends React.Component {
     }
     onDelayStart(e, to);
     if (this.props.class === 'logout') {
-      api.default.execAuth(
-        'DELETE',
-        `http://localhost:3001/api/v1/sessions`,
-      );
+      api.default.execAuth('DELETE', `http://localhost:3001/api/v1/sessions`);
       cookie.remove('token');
       cookie.remove('accountId');
       window.location.href = '/';
