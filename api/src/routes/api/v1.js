@@ -28,8 +28,17 @@ router
   .route('/receipts')
   .post(v1Controller.receipts.createReceipt)
   .delete(v1Controller.receipts.deleteReceipt)
-  .put(v1Controller.receipts.personPay)  
+  .put(v1Controller.receipts.personPay) 
 
+router
+  .route('/requests')
+  .post(v1Controller.requests.createRequest)
+
+router
+  .route('/requests/:requestId')
+  .get(v1Controller.requests.getRequest)
+  .delete(v1Controller.requests.removeRequest)
+  
 router
   .route('/receipts/:groupsId')
   .get(v1Controller.groups.getGroup)
