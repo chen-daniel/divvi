@@ -45,6 +45,7 @@ function execAuth(type, url, data, success, error) {
     error: error
   });
 }
+
 module.exports = {
   exec: exec,
   execAuth: execAuth
