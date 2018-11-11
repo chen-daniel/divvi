@@ -46,7 +46,7 @@ function execAuth(type, url, data, success, error) {
   });
 }
 
-module.exports = {
+export default {
   exec: exec,
   execAuth: execAuth
 };

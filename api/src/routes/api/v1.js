@@ -20,8 +20,8 @@ router
 router
   .route('/groups/:groupsId')
   .get(v1Controller.groups.getGroup)
-  .post(v1Controller.groups.createSession)
-  .delete(v1Controller.groups.deleteSession);
+  .post(v1Controller.groups.createGroup)
+  .delete(v1Controller.groups.deleteGroup);
 
 router
   .route('/userGroups')
@@ -31,12 +31,6 @@ router
 router
   .route('/userGroups/:userGroupId')
   .delete(v1Controller.userToGroups.deleteUserGroup);
-  
-router
-  .route('/groups/:groupsId')
-  .get(v1Controller.groups.getGroup)
-  .post(v1Controller.groups.createSession)
-  .delete(v1Controller.groups.deleteSession);
 
 router
   .route('/accounts')
