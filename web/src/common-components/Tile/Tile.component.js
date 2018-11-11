@@ -17,7 +17,6 @@ class Tile extends React.Component {
   constructor(props) {
     super(props);
     this.timeout = null;
-    this.q
   }
 
   componentWillUnmount() {

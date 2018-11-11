@@ -10,7 +10,7 @@ class Groups {
     const sql = `
       CREATE TABLE IF NOT EXISTS groups (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT UNIQUE NOT NULL)`;
+        name TEXT NOT NULL)`;
     const response = await this.dao.run(sql);
     this.dao.close();
     return response;
@@ -19,7 +19,7 @@ class Groups {
   async create(name) {
     this.connectDAO();
     const response = await this.dao.run(
-      'INSERT INTO groups (name) VALUES (?, ?)',
+      'INSERT INTO groups (name) VALUES (?)',
       [name]
     );
     this.dao.close();

@@ -6,33 +6,39 @@ import DelayLinkList from '../../common-components/DelayLink/DelayLinkList.compo
 
 import $ from 'jquery';
 
-import './Home.css';
+import './Group.css';
 
 const api = require('../../api');
 
-class Home extends React.Component {
+class Group extends React.Component {
   constructor(props) {
     super(props);
+    const matches = window.location.href.match(/(\d+)\D*$/g);
+    const group = matches[matches.length - 1];
 
-    this.state = { creatingGroup: false, groupName: '', groups: [] };
+    this.state = {
+      groupId: group,
+      uploadingReceipt: false,
+      receiptParams: {},
+      receipts: []
+    };
   }
   componentDidMount() {
     api.default.execAuth(
       'GET',
-      `http://localhost:3001/api/v1/accounts/${cookie.load(
-        'accountId'
-      )}/groups`,
+      `http://localhost:3001/api/v1/groups/${this.state.groupId}/receipts`,
       null,
       (response) => {
         this.setState({
-          creatingGroup: this.state.creatingGroup,
-          groupName: this.state.groupName,
-          groups: response
+          groupId: this.state.groupId,
+          uploadingReceipt: this.state.uploadingReceipt,
+          receiptParams: this.state.receiptParams,
+          receipts: response
         });
       },
       (err) => {
         console.log(err);
-        alert('Failed to load account groups with provided credentials', err);
+        alert('Failed to load group receipts with provided credentials', err);
       }
     );
     setTimeout(() => {
@@ -53,28 +59,28 @@ class Home extends React.Component {
     return this.state.groupName.length > 0;
   }
 
-  generateGroupsList() {
-    const groupsList = [];
-    for (let i = 0; i < this.state.groups.length; i++) {
-      let link = `/groups/${this.state.groups[i].id}`;
-      groupsList.push(
+  generateReceiptsList() {
+    const receiptsList = [];
+    for (let i = 0; i < this.state.receipts.length; i++) {
+      let link = `/receipts/${this.state.groups[i].id}`;
+      receiptsList.push(
         <DelayLinkList
-          class="group"
+          class="receipt"
           to={link}
           delay={375}
           onDelayStart={this._delayStart}
         >
-          <p>{this.state.groups[i].name}</p>
+          <p>{this.state.receipts[i].name}</p>
         </DelayLinkList>
       );
     }
-    return groupsList;
+    return receiptsList;
   }
 
-  createGroupForm(e) {
+  uploadReceiptForm(e) {
     e.preventDefault();
     this.setState({
-      creatingGroup: true,
+      uploadingReceipt: true,
       groupName: ''
     });
   }
@@ -84,13 +90,14 @@ class Home extends React.Component {
     const data = this.state.groupName;
     api.default.execAuth(
       'POST',
-      'http://localhost:3001/api/v1/groups',
+      `http://localhost:3001/api/v1/groups/${this.state.groupId}/receipt`,
       'json=' + escape(JSON.stringify(data)),
       (response) => {
         this.setState({
-          creatingGroup: false,
+          groupId: this.groupId,
+          uploadingReceipt: this.state.uploadingReceipt,
           groupName: this.state.groupName,
-          groups: response
+          receipts: response
         });
       },
       (err) => {
@@ -100,9 +107,9 @@ class Home extends React.Component {
   };
 
   render() {
-    if (this.state.creatingGroup) {
+    if (this.state.uploadingReceipt) {
       return (
-        <section className="home-page" id="main">
+        <section className="Group-page" id="main">
           <div className="create-group" onClick={this.createGroupModal}>
             <form onSubmit={this.handleSubmit}>
               <FormGroup controlId="groupName" bsSize="large">
@@ -124,23 +131,23 @@ class Home extends React.Component {
               </Button>
             </form>
           </div>
-          <ul>{this.generateGroupsList()}</ul>
+          <ul>{this.generateReceiptsList()}</ul>
         </section>
       );
     } else {
       return (
-        <section className="home-page" id="main">
+        <section className="group-page" id="main">
           <li
-            className="create-group group"
-            onClick={this.createGroupForm.bind(this)}
+            className="upload-receipt receipt"
+            onClick={this.uploadReceiptForm.bind(this)}
           >
-            + Create new group
+            + Upload Receipt to Group
           </li>
-          <ul>{this.generateGroupsList()}</ul>
+          <ul>{this.generateReceiptsList()}</ul>
         </section>
       );
     }
   }
 }
 
-export default Home;
+export default Group;
