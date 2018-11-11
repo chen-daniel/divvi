@@ -38,7 +38,8 @@ async function getAccount(req, res) {
 
 async function updateAccount(req, res) {
   try {
-    const account = _.pick(req.body, [
+    const json = JSON.parse(req.body.json);
+    const account = _.pick(json, [
       'username',
       'password',
       'fullName',
