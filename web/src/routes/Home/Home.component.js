@@ -14,15 +14,16 @@ class Home extends React.Component {
     this.state = {};
   }
   componentDidMount() {
-    api.execAuth(
+    api.default.execAuth(
       'GET',
-      `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}`,
+      `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}/groups`,
+      null,
       (response) => {
         this.setState(response);
       },
       (err) => {
         console.log(err);
-        alert('Failed to load account info with provided credentials', err);
+        alert('Failed to load account groups with provided credentials', err);
       }
     );
     setTimeout(() => {
@@ -37,7 +38,7 @@ class Home extends React.Component {
     return (
       <section className="home-page" id="main">
         <header>
-          <span className="avatar" />
+          
         </header>
         <p>{JSON.stringify(this.state)}</p>
       </section>

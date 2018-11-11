@@ -42,4 +42,8 @@ router
   .post(v1Controller.accounts.createAccount)
   .put(authentication.requireSession, v1Controller.accounts.updateAccount);
 
+router
+  .route('/accounts/:accountId/groups')
+  .get(authentication.requireSession, v1Controller.groups.getGroupsForAccount);
+
 module.exports = router;

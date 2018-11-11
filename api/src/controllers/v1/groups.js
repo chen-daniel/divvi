@@ -39,9 +39,19 @@ async function deleteGroup(req, res) {
   }
 }
 
+async function getGroupsForAccount(req, res) {
+  try {
+    const result = await Groups.getAllForAccount(req.params.accountId);
+    return res.json(result);
+  } catch (err) {
+    return res.status(400).send('Bad Request');
+  }
+}
+
 module.exports = {
     getAllGroups: getAllGroups,
     getGroup: getGroup,
     createGroup: createGroup,
-    deleteGroup: deleteGroup
+    deleteGroup: deleteGroup,
+    getGroupsForAccount: getGroupsForAccount
 };

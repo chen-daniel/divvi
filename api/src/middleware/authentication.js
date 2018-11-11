@@ -20,6 +20,7 @@ async function requireSession(req, res, next) {
       if (req.get('Device') === 'web') {
         _updateToken(sessionToken);
       }
+      console.log('hi');
       return next();
     } else {
       throw error;
