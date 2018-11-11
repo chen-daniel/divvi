@@ -58,13 +58,10 @@ class Login extends React.Component {
       data: 'json=' + escape(JSON.stringify(data)),
       success: (response) => {
         cookie.save('token', response.token);
+        console.log(response.accountId);
         cookie.save('accountId', response.accountId);
 
-        const delay = 375;
-
-        this.timeout = setTimeout(() => {
-          window.location.replace('/home');
-        }, delay);
+        window.location.href = '/#/home';
       },
       error: (err) => {
         alert('Failed to login with provided credentials', err);

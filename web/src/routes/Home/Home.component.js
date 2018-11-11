@@ -22,14 +22,14 @@ class Home extends React.Component {
         );
         request.setRequestHeader(
           'Access-Control-Allow-Headers',
-          'Origin, Content-Type, X-Auth-Token'
+          'Origin, Content-Type, X-Auth-Token, X-Curr-Account'
         );
         request.setRequestHeader('X-Auth-Token', cookie.load('token'));
         request.setRequestHeader('X-Curr-Account', cookie.load('accountId'));
       },
       url: `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}`,
       success: (response) => {
-        this.state.account = response;
+        this.setState(response);
       },
       error: (err) => {
         console.log(err);
@@ -48,11 +48,9 @@ class Home extends React.Component {
     return (
       <section className="home-page" id="main">
         <header>
-          <span className="avatar">
-            <img alt="" id="home-img" />
-          </span>
+          <span className="avatar" />
         </header>
-        {this.state.account}
+        <p>{JSON.stringify(this.state)}</p>
       </section>
     );
   }
