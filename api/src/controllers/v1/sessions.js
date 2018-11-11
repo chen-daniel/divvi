@@ -21,7 +21,7 @@ async function createSession(req, res) {
       .toString(36)
       .substr(2, 9);
     const result = await SessionTokens.create(accountId, token, expiryDate);
-    return res.json({ token: token, currAccount: accountId });
+    return res.json({ token: token, accountId: accountId });
   } catch (err) {
     return res.status(400).send(err);
   }
@@ -29,6 +29,7 @@ async function createSession(req, res) {
 
 async function deleteSession(req, res) {
   try {
+    sessionToken = req.get('X-Auth-Token');
     const result = await SessionTokens.delete(sessionToken);
     return res.json(result);
   } catch (err) {

@@ -3,23 +3,24 @@ const SessionTokensModel = require('../models/sessionTokens');
 const SessionTokens = new SessionTokensModel();
 const moment = require('moment');
 
-async function requireSession(req, res) {
+async function requireSession(req, res, next) {
   try {
     const token = req.get('X-Auth-Token');
     const currAccount = req.get('X-Curr-Account');
     const dao = new appDAO('./db/app.db');
-    const sessionTokens = new SessionTokens(dao);
-    const sessionToken = await sessionTokens.getById(token);
+    const sessionToken = await SessionTokens.getById(token);
     dao.close();
     if (
+      sessionToken &&
       sessionToken.token === token &&
-      sessionToken.accountId === currAccount &&
-      moment(sessionToken.expiryDate).isAfter(moment())
+      sessionToken.accountId === parseInt(currAccount) &&
+      (!sessionToken.expiryDate ||
+        moment(sessionToken.expiryDate).isAfter(moment()))
     ) {
       if (req.get('Device') === 'web') {
         _updateToken(sessionToken);
       }
-      return;
+      return next();
     } else {
       throw error;
     }

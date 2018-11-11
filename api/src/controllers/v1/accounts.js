@@ -28,7 +28,9 @@ async function createAccount(req, res) {
 
 async function getAccount(req, res) {
   try {
+    console.log('Hi');
     const result = await Accounts.getById(req.params.accountId);
+    console.log(result);
     delete result.password;
     return res.json(result);
   } catch (err) {
