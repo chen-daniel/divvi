@@ -14,8 +14,11 @@
     "bcrypt": "^3.0.2",
     "bluebird": "^3.5.3",
     "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "gm": "^1.23.1",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
+    "node-tesseract-ocr": "^0.1.0",
     "sqlite3": "^4.0.3"
   }
 }
