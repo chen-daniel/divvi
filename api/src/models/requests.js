@@ -44,7 +44,7 @@ class Requests {
         const response = this.dao.run(`DELETE FROM requests WHERE id = ?`, [id]);
         this.dao.close();
         return response;
-      }
+    }
 
 }
 module.exports = Requests;

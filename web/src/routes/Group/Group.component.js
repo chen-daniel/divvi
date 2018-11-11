@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import cookie from 'react-cookies';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
@@ -20,7 +21,9 @@ class Group extends React.Component {
       groupId: group,
       uploadingReceipt: false,
       receiptParams: {},
-      receipts: []
+      receipts: [],
+      file: null,
+      receiptType: 0
     };
   }
   componentDidMount() {
@@ -55,6 +58,18 @@ class Group extends React.Component {
     });
   };
 
+  handleType = (event) => {
+    this.setState({
+      receiptType: event.target.value
+    })
+  };
+
+  handleFile = (e) => {
+    this.setState({
+      file: e.target.files[0]
+    });
+  }
+
   validateForm() {
     return this.state.groupName.length > 0;
   }
@@ -85,6 +100,30 @@ class Group extends React.Component {
     });
   }
 
+  uploadImage = (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+            'X-Auth-Token': cookie.load('token'),
+            'X-Curr-Account': cookie.load('accountId')
+        }
+    };
+      formData.append('myImage', this.state.file)
+      axios.post(`http://localhost:3001/api/v1/uploads`, formData, config)
+      .then(res => {
+        console.log(res);
+        // this.setState({
+        // receipts: [...this.state.receipts, res.receipt]
+      // })
+    }
+      );
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
     const data = this.state.groupName;
@@ -111,9 +150,12 @@ class Group extends React.Component {
       return (
         <section className="Group-page" id="main">
           <div className="create-group" onClick={this.createGroupModal}>
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.uploadImage.bind(this)}>
+            <h1>File Upload</h1>
+                <input type="file" name="myImage" onChange= {this.handleFile} />
+
               <FormGroup controlId="groupName" bsSize="large">
-                <ControlLabel>Group Name</ControlLabel>
+                <ControlLabel>Description</ControlLabel>
                 <FormControl
                   autoFocus
                   type="text"
@@ -121,14 +163,15 @@ class Group extends React.Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <Button
-                block
-                bsSize="large"
-                disabled={!this.validateForm()}
-                type="submit"
-              >
-                Create Group
-              </Button>
+                <ControlLabel>Type</ControlLabel>
+                <FormGroup controlId="formControlsSelect" bsSize="large">
+                  <select onChange={this.handleType}>
+                    <option value="0">I'll charge them</option>
+                    <option value="1">They'll pick what they bought</option>
+                    <option value="2">Split it equally</option>
+                </select>
+              </FormGroup>
+              <button type="submit">Create</button>
             </form>
           </div>
           <ul>{this.generateReceiptsList()}</ul>

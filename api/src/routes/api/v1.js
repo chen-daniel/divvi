@@ -2,11 +2,40 @@ const express = require('express');
 const router = new express.Router();
 const controllers = require('../../controllers');
 const middleware = require('../../middleware');
+const ocrService = require('../../services/ocrService')
 const v1Controller = controllers.v1;
+
+const path = require("path");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: "images/",
+  filename: function(req, file, cb){
+     cb(null,"IMAGE.jpg");
+  }
+});
+
+function handleRequest (req, res) {
+  setTimeout(async () => {
+    const response = await ocrService.main('images/IMAGE.jpg', (result) => {
+      res.send(result);
+    })
+  }, 100);
+}
+
+const upload = multer({
+  storage: storage,
+  limits:{fileSize: 1000000},
+}).single("myImage");
+
 
 const authentication = middleware.authentication;
 
 router.get('/helloworld', v1Controller.helloWorld);
+
+router
+  .route('/uploads')
+  .post(upload, handleRequest);
 
 router
   .route('/sessions')

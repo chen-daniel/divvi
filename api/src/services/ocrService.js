@@ -12,19 +12,17 @@ var options = {
     }
 };
 
-filename = 'maybegood'
-path_ex = 'images/' + filename + '.jpg'
-main(path_ex)
 
-async function main(dir) {
-    outfile = 'images/modify/' + filename + '_modify.jpg'
-    outfile2 = 'images/modify/' + filename + '_modify2.jpg'
+
+async function main(dir, cb) {
+    outfile = 'images/modify/IMAGE_modify.jpg'
+    outfile2 = 'images/modify/IMAGE_modify2.jpg'
 
     cleanUp(dir, outfile);
-    setTimeout(() => {
+    setTimeout(async () => {
         cleanUp2(outfile, outfile2);
-        setTimeout(() => {
-            imageToText(outfile2);
+        setTimeout(async () => {
+            var response = await imageToText(outfile2, cb);
             setTimeout(() => {directory = './images/modify'
             fs.readdir(directory, (err, files) => {
                 if (err) throw err;
@@ -34,25 +32,27 @@ async function main(dir) {
                     if (err) throw err;
                 });
                 }
-          })}, 200)
+                return response
+          })}
+          , 200)
         }, 200);
     }, 200);
 }
 
-async function imageToText(path) {
+async function imageToText(path, cb) {
     // will be dynamic later
     await tesseract.recognize(path, options)
     .then(text => {
         // split the text by line
         var lines = text.match(/^.*([\n\r]+|$)/gm);
-        readAndCreateJson(lines)
+        return readAndCreateJson(lines, cb)
     })
     .catch(err => {
         console.log('error:', err)
     })
 }
 
-async function readAndCreateJson(resultData) {
+async function readAndCreateJson(resultData, cb) {
     // var result = []
     var entireReceipt = {
         'items': [],
@@ -143,8 +143,8 @@ async function readAndCreateJson(resultData) {
             }
         }
     }
-    // console.log(entireReceipt)
-    console.log(JSON.stringify(entireReceipt))
+    // return entireReceipt
+    cb(JSON.stringify(entireReceipt));
 }
 
 async function cleanUp(path, outfile) {
@@ -177,3 +177,7 @@ async function cleanUp2(path, outfile) {
     });
     return;
 }
+
+module.exports = {
+    main: main
+  };
