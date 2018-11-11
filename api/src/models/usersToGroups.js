@@ -10,8 +10,8 @@ class UserToGroups {
       const sql = `
       CREATE TABLE IF NOT EXISTS user_groups (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        groupId INTEGER UNIQUE NOT NULL,
-        userId INTEGER UNIQUE NOT NULL)`;
+        groupId INTEGER NOT NULL,
+        userId INTEGER NOT NULL)`;
       const response = await this.dao.run(sql);
       this.dao.close();
       return response;

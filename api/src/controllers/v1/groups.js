@@ -1,6 +1,8 @@
 const GroupModel = require('../../models/groups');
+const UserToGroupModel = require('../../models/usersToGroups');
 
 const Groups = new GroupModel();
+const UserToGroup = new UserToGroupModel();
 
 async function getGroup(req, res) {
   try {
@@ -23,8 +25,10 @@ async function getAllGroups(req, res) {
 async function createGroup(req, res) {
   try {
     const json = JSON.parse(req.body.json);
-    const result = await Groups.create(json.name);
-    return res.json(result);
+    const response = await Groups.create(json);
+    await UserToGroup.create(req.get('X-Curr-Account'), response.id);
+    const allGroups = await Groups.getAllForAccount(req.get('X-Curr-Account'));
+    return res.json(allGroups);
   } catch (err) {
     return res.status(400).send(err);
   }

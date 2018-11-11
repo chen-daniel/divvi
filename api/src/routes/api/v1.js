@@ -15,18 +15,20 @@ router
 
 router
   .route('/groups')
-  .get(v1Controller.groups.getAllGroups);
+  .get(v1Controller.groups.getAllGroups)
+  .post(authentication.requireSession, v1Controller.groups.createGroup);
+
   
 router
   .route('/groups/:groupsId')
   .get(v1Controller.groups.getGroup)
-  .post(v1Controller.groups.createGroup)
   .delete(v1Controller.groups.deleteGroup);
 
 // needs to find out how to do entire update, get by group id kinda mess things up
 router
-  .route('/receipts')
-  .post(v1Controller.receipts.createReceipt)
+  .route('/groups/:groupId/receipts')
+  .get(authentication.requireSession, v1Controller.receipts.getReceiptByGroup)
+  .post(authentication.requireSession, v1Controller.receipts.createReceipt)
   .delete(v1Controller.receipts.deleteReceipt)
   .put(v1Controller.receipts.personPay) 
 
@@ -38,10 +40,6 @@ router
   .route('/requests/:requestId')
   .get(v1Controller.requests.getRequest)
   .delete(v1Controller.requests.removeRequest)
-  
-router
-  .route('/receipts/:groupsId')
-  .get(v1Controller.groups.getGroup)
 
 router
   .route('/userGroups')

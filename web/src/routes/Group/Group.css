@@ -1,28 +1,21 @@
-#home-img {
-  height: 200px;
-  width: 200px;
-  border-radius: 100%;
-  content: url('../../images/profile.jpg');
-}
-
-.home-page {
+.group-page {
   min-width: 40vw;
   max-width: 100%;
   padding: 2.5em 3em 0.5em 3em;
   list-style: none;
 }
 
-.home-page > p {
+.group-page > p {
   text-align: left;
   text-transform: none;
   color: black;
   letter-spacing: 0.075em;
 }
 
-.create-group {
+.upload-receipt {
   cursor: pointer;
 }
 
-.group {
+.receipt {
   cursor: pointer;
 }
