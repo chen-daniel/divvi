@@ -62,6 +62,7 @@ class Login extends React.Component {
         cookie.save('accountId', response.accountId);
 
         window.location.href = '/#/home';
+        window.location.reload(false);
       },
       error: (err) => {
         alert('Failed to login with provided credentials', err);
