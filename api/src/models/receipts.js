@@ -10,8 +10,8 @@ class Receipts {
         const sql = `
         CREATE TABLE IF NOT EXISTS receipts (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          groupId INTEGER UNIQUE NOT NULL,
-          owner INTEGER NOT NULL,
+          groupId INTEGER NOT NULL,
+          ownerId INTEGER NOT NULL,
           description TEXT,
           receipt BLOB NOT NULL,
           type INTEGER NOT NULL,
@@ -23,11 +23,11 @@ class Receipts {
 
     async create(information) {
         this.connectDAO();
-        const { groupId, owner, description, receipt, type, status } = information;
+        const { groupId, ownerId, description, receipt, type, status } = information;
         const response = await this.dao.run(
-            `INSERT INTO receipts (groupId, owner, description, receipt, type, status)
+            `INSERT INTO receipts (groupId, ownerId, description, receipt, type, status)
               VALUES (?, ?, ?, ?, ?, ?)`,
-            [groupId, owner, description, receipt, type, status]
+            [groupId, ownerId, description, receipt, type, status]
           );
           this.dao.close();
           return response;
@@ -44,19 +44,19 @@ class Receipts {
     }
 
 
-    async update(information) {
+    async update(id, information) {
         this.connectDAO();
-        const { id, groupId, owner, description, receipt, type, status } = information;
+        const { groupId, ownerId, description, receipt, type, status } = information;
         const response = await this.dao.run(
           `UPDATE receipts
           SET groupId = ?,
-            owner = ?,
+            ownerId = ?,
             description = ?,
             receipt = ?,
             type = ?,
             status = ? 
           WHERE id = ?`,
-          [id, groupId, owner, description, receipt, type, status]
+          [groupId, ownerId, description, receipt, type, status, id]
         );
         this.dao.close();
         return response;
@@ -64,7 +64,7 @@ class Receipts {
 
     async delete(id, userId) {
         this.connectDAO();
-        const response = await this.dao.run(`DELETE FROM receipts WHERE id = ? AND owner = ?`, [id, userId]);
+        const response = await this.dao.run(`DELETE FROM receipts WHERE id = ? AND ownerId = ?`, [id, userId]);
         this.dao.close();
         return response;
       }
@@ -89,3 +89,4 @@ class Receipts {
         return response;
     }
 }
+module.exports = Receipts;
