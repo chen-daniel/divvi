@@ -1,7 +1,5 @@
 const AppDAO = require('./appDAO');
 
-const dao = new AppDAO('./db/app.db');
-
 const Accounts = require('../src/models/accounts');
 const SessionTokens = require('../src/models/sessionTokens');
 const Groups = require('../src/models/groups');
@@ -16,5 +14,3 @@ accounts.createTable();
 sessionTokens.createTable();
 groups.createTable();
 usersToGroups.createTable();
-
-dao.close();
