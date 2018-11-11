@@ -27,7 +27,7 @@ class Home extends React.Component {
         request.setRequestHeader('X-Auth-Token', cookie.load('token'));
         request.setRequestHeader('X-Curr-Account', cookie.load('accountId'));
       },
-      url: `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}`,
+      url: `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}/groups`,
       success: (response) => {
         this.setState(response);
       },
