@@ -5,6 +5,8 @@ import $ from 'jquery';
 
 import './Home.css';
 
+const api = require('../../api');
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -12,30 +14,17 @@ class Home extends React.Component {
     this.state = {};
   }
   componentDidMount() {
-    $.ajax({
-      type: 'GET',
-      beforeSend: function(request) {
-        request.setRequestHeader('Access-Control-Allow-Origin', '*');
-        request.setRequestHeader(
-          'Access-Control-Allow-Methods',
-          'GET, POST, PATCH, PUT, DELETE, OPTIONS'
-        );
-        request.setRequestHeader(
-          'Access-Control-Allow-Headers',
-          'Origin, Content-Type, X-Auth-Token, X-Curr-Account'
-        );
-        request.setRequestHeader('X-Auth-Token', cookie.load('token'));
-        request.setRequestHeader('X-Curr-Account', cookie.load('accountId'));
-      },
-      url: `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}`,
-      success: (response) => {
+    api.execAuth(
+      'GET',
+      `http://localhost:3001/api/v1/accounts/${cookie.load('accountId')}`,
+      (response) => {
         this.setState(response);
       },
-      error: (err) => {
+      (err) => {
         console.log(err);
         alert('Failed to load account info with provided credentials', err);
       }
-    });
+    );
     setTimeout(() => {
       const wrapper = $('#wrapper');
       wrapper.removeClass('is-loading');

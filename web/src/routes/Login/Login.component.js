@@ -58,10 +58,10 @@ class Login extends React.Component {
       data: 'json=' + escape(JSON.stringify(data)),
       success: (response) => {
         cookie.save('token', response.token);
-        console.log(response.accountId);
         cookie.save('accountId', response.accountId);
 
         window.location.href = '/#/home';
+        window.location.reload(false);
       },
       error: (err) => {
         alert('Failed to login with provided credentials', err);

@@ -1,6 +1,6 @@
-const GroupModel = require('../../models/userToGroups');
+const UserToGroupsModel = require('../../../src/models/usersToGroups');
 
-const UserToGroups = new UserToGroups();
+const UserToGroups = new UserToGroupsModel();
 
 async function createUserToGroup(req, res) {
   try {
